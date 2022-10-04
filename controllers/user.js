@@ -3,9 +3,9 @@ const bcryptjs = require("bcryptjs");
 
 const User = require("../models/user");
 
-const userGet = async(req = request, res = response) => {
-  const {limit = 5, from = 0} = req.query;
-  const statusQuery = { status: true }
+const userGet = async (req = request, res = response) => {
+  const { limit = 5, from = 0 } = req.query;
+  const statusQuery = { status: true };
 
   // const users = await User.find(statusQuery)
   //   .skip(from)
@@ -13,16 +13,19 @@ const userGet = async(req = request, res = response) => {
 
   // const totalUsers = await User.countDocuments(statusQuery);
 
-  const [totalUsers,users] = await Promise.all([
-    User.countDocuments(statusQuery),
-    User.find(statusQuery)
-      .skip(from)
-      .limit(limit)])
+  try {
+    const [totalUsers, users] = await Promise.all([
+      User.countDocuments(statusQuery),
+      User.find(statusQuery).skip(from).limit(limit),
+    ]);
 
-  res.json({
-    totalUsers,
-    users
-  });
+    res.json({
+      totalUsers,
+      users,
+    });
+  } catch (error) {
+    throw error;
+  }
 };
 
 const userPut = async (req, res = response) => {
@@ -35,9 +38,13 @@ const userPut = async (req, res = response) => {
     leftData.password = bcryptjs.hashSync(password, salt);
   }
 
-  const user = await User.findByIdAndUpdate(id, leftData);
+  try {
+    const user = await User.findByIdAndUpdate(id, leftData);
 
-  res.json(user);
+    res.json(user);
+  } catch (error) {
+    throw error;
+  }
 };
 
 const userPost = async (req, res = response) => {
@@ -48,9 +55,13 @@ const userPost = async (req, res = response) => {
   const salt = bcryptjs.genSaltSync();
   user.password = bcryptjs.hashSync(password, salt);
 
-  await user.save();
+  try {
+    await user.save();
 
-  res.json(user);
+    res.json(user);
+  } catch (error) {
+    throw error;
+  }
 };
 
 const userPatch = (req, res = response) => {
@@ -59,15 +70,19 @@ const userPatch = (req, res = response) => {
   });
 };
 
-const userDelete = async(req, res = response) => {
+const userDelete = async (req, res = response) => {
   const { id } = req.params;
-  
+
   // Deletion
   // const user = await User.findByIdAndDelete(id);
 
-  const user = await User.findByIdAndUpdate( id, { status:false });
+  try {
+    const user = await User.findByIdAndUpdate(id, { status: false });
 
-  res.json(user);
+    res.json(user);
+  } catch (error) {
+    throw error;
+  }
 };
 
 module.exports = {

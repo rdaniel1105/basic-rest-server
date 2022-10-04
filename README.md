@@ -1,3 +1,3 @@
 # WebServer + RestServer
 
-Recordar ejecutar ```npm instal``` para rescuestuir modulos de Node.
+Recordar ejecutar ```npm install``` para rescuestuir modulos de Node.

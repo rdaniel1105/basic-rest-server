@@ -37,7 +37,7 @@
               
               fetch( window.location.hostname.includes('localhost')
                 ? 'http://localhost:8080/api/auth/google'
-                : 'https://rest-server-nodejs-course.herokuapp.com//api/auth/google',{
+                : 'https://rest-server-nodejs-course.herokuapp.com/api/auth/google',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -49,7 +49,7 @@
                 console.log(resp);
                 localStorage.setItem( 'email', resp.user.email)
             })
-            .catch(console.warn);
+            .catch(err => console.warn(err));
             
         }
 

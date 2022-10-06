@@ -43,22 +43,22 @@ const authPost = async (req, res = response) => {
   }
 };
 
-const googleSignIn = async(req, res = response) => {
-  const {id_token} = req.body;
+const googleSignIn = async (req, res = response) => {
+  const { id_token } = req.body;
 
   try {
-    const { name, img, email } = await googleVerify( id_token );
-    
-    let user = await User.findOne({email});
+    const { name, img, email } = await googleVerify(id_token);
+
+    let user = await User.findOne({ email });
 
     if (!user) {
       const data = {
         name,
         email,
-        password: ':P',
+        password: ":P",
         img,
         google: true,
-        role: 'USER_ROLE'
+        role: "USER_ROLE",
       };
 
       user = new User(data);
@@ -67,29 +67,26 @@ const googleSignIn = async(req, res = response) => {
 
     if (!user.status) {
       return res.status(401).json({
-        msg: 'Speak with admin'
-      })
+        msg: "Speak with admin",
+      });
     }
 
     const token = await generateJwt(user.id);
 
     res.json({
       user,
-      token
-    })
-    
+      token,
+    });
   } catch (error) {
     res.status(400).json({
       ok: false,
-      msg: 'Token not verified'
+      msg: "Token not verified",
     });
     return console.log(error);
   }
-
-
-}
+};
 
 module.exports = {
   authPost,
-  googleSignIn
+  googleSignIn,
 };

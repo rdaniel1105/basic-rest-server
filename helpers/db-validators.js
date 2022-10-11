@@ -73,11 +73,20 @@ const isAdminRole = async (req,res=response,next) => {
   next();
 }
 
+const isPermitedColection = (colection='', colections=[]) => {
+  const included = colections.includes(colection);
+  if (!included) {
+    throw new Error(`La colección ${colection} no es una colección válida`)
+  }
+  return true;
+}
+
 module.exports = {
   isAValidRole,
   isAValidEmail,
   isAnUserId,
   isACategoryId,
   isAdminRole,
-  isAProductId
+  isAProductId,
+  isPermitedColection
 };
